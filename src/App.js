@@ -8,32 +8,52 @@ class App extends Component {
     super(props);
     this.state = {
       profiles: {},
-      cardIds: [11, 31, 59, 111, 3],
+      profileIds: [11, 31, 59, 111, 3],
     }
   }
+  // remove profile at the top
+  nextProfile = () => {
+    this.setState({
+      profileIds: this.state.profileIds.slice(1)
+    });
+  }
+
   // this should only run on a legitimate names object
+  testFetch = async (id) => {
+    try {
+      const result = await pokeApi.getName(99492, 'ja');
+      console.log(result);
+    }
+    catch(e) {
+      console.log('fail')
+      return;
+    }
+  }
+
 
   // creates an object
   fetchProfile = async (id) => {
-    const name = await pokeApi.getName(id, 'ja')
+    const name = await pokeApi.getName(id, 'ja');
     const sprite = await pokeApi.getSprite(id);
     this.setState({
-      profiles: { ...this.state.profiles,
+      profiles: {
+        ...this.state.profiles,
         [id]: { name: name, sprite: sprite }
       }
-    })
+    });
   }
   loadProfiles = () => {
-    this.state.cardIds.forEach(id => this.fetchProfile(id));
+    this.state.profileIds.forEach(id => this.fetchProfile(id));
   }
   render() {
-    console.log(this.state.profiles)
-    const cards = this.state.cardIds.map((id, i) => 
+    const cards = this.state.profileIds.map((id, i) => 
       <ProfileCard key={i} profile={this.state.profiles[id]} />
     );
     return (
       <div>
+        <button onClick={() => this.testFetch(31)}>TESTFETCH</button>
         <button onClick={() => this.loadProfiles()}>FETCH</button>
+        <button onClick={() => this.nextProfile()}>NEXT</button>
         {cards}
       </div>
     );

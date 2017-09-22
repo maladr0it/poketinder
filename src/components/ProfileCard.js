@@ -1,13 +1,12 @@
 import React from 'react';
 
+// format this so it has basic shape even when not loaded
 const ProfileCard = (props) => {
-  if (!props.profile) {
-    return <div>Loading...</div>
-  }
+  const isLoaded = (props.profile) ? true : false;
   return (
     <div>
-      {props.profile.name}
-      <img src={URL.createObjectURL(props.profile.sprite)} />
+      {(isLoaded)? props.profile.name : ''}
+      {(isLoaded)? <img src={URL.createObjectURL(props.profile.sprite)} /> : <div />}
       <button>COOL!</button>
       <button>LAME!</button>
     </div>

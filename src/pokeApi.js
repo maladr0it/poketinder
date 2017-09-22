@@ -5,13 +5,14 @@ const pokeApi = {
         'https://pokeapi.co/api/v2/pokemon-species/'+id+'/'
       );
       if (!resp.ok) {
-        throw 'name_not_found';
+        throw new Error('name_not_found');
       }
       const respJson = await resp.json();
       return this.localise(respJson.names, lang)
     }
     catch(e) {
-      return e;
+      console.log(e.message);
+      return 'name';
     }
   },
   async getSprite(id) {
@@ -20,12 +21,13 @@ const pokeApi = {
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+id+'.png'
       );
       if (!resp.ok) {
-        throw 'invalid_url'
+        throw new Error('sprite_not_found');
       }
       return resp.blob();
     }
     catch(e) {
-      return e;
+      console.log(e.message);
+      return new Blob();
     }
   },
   localise(names, lang) {
@@ -33,6 +35,7 @@ const pokeApi = {
       return names.find(n => n.language.name === lang).name;
     }
     catch(e) {
+      console.log(e.type);
       return 'no_translation';
     }
   },
