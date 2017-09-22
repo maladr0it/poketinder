@@ -1,9 +1,13 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
-import {Card, CardTitle, CardMedia} from 'material-ui/Card';
+import {Card, CardTitle, CardMedia, CardActions} from 'material-ui/Card';
+import IconButton from 'material-ui/IconButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
-const style = {
+import Favorite from 'material-ui/svg-icons/action/favorite';
+import Clear from 'material-ui/svg-icons/content/clear';
+
+const styles = {
   // textAlign: 'center',
   imageContainer: {
     display: 'flex',
@@ -16,6 +20,14 @@ const style = {
   image: {
     height: '100%'
   },
+  iconButton: {
+    width: 100,
+    height: 100,
+  },
+  icon: {
+    width: 72,
+    height: 72,
+  }
 }
 
 const ProfileCard = (props) => {
@@ -24,7 +36,7 @@ const ProfileCard = (props) => {
     <CardTitle title={props.profile.name} /> : undefined
   const sprite = (isLoaded) ?
     <img
-      style={style.image}
+      style={styles.image}
       src={URL.createObjectURL(props.profile.sprite)}
     />
       :
@@ -36,12 +48,18 @@ const ProfileCard = (props) => {
   return (
     <Card>
       <CardMedia overlay={nameTitle}>
-        <div style={style.imageContainer}>
+        <div style={styles.imageContainer}>
           {sprite}
         </div>
       </CardMedia>
-      <button>COOL!</button>
-      <button>LAME!</button>
+      <CardActions>
+        <IconButton style={styles.iconButton} iconStyle={styles.icon}>
+          <Favorite color={'e57373'} />
+        </IconButton>
+        <IconButton style={styles.iconButton} iconStyle={styles.icon}>
+          <Clear color={'90A4AE'} />
+        </IconButton>
+      </CardActions>
     </Card>
   )
 }
