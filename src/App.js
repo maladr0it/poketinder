@@ -9,6 +9,7 @@ class App extends Component {
     this.state = {
       profilesById: {},
       profileIds: [11, 31, 59, 111, 3],
+      profileHidden: false,
     }
   }
   // remove profile at the top
@@ -29,18 +30,22 @@ class App extends Component {
     });
   }
   // fetches profile data, adds it to the stack of profiles
-  addProfile
   loadProfiles = () => {
     this.state.profileIds.forEach(id => this.fetchProfile(id));
   }
+  hideProfile = () => {
+    this.setState({ profileHidden: true })
+  }
   render() {
+    console.log(this.state);
     const cards = this.state.profileIds.map((id, i) => 
-      <ProfileCard key={i} profile={this.state.profilesById[id]} />
+      <ProfileCard key={i} profile={this.state.profilesById[id]} hidden={this.state.profileHidden}/>
     );
     return (
       <div>
         <button onClick={() => this.loadProfiles()}>FETCH</button>
         <button onClick={() => this.nextProfile()}>NEXT</button>
+        <button onClick={() => this.hideProfile()}>HIDE</button>
         {cards}
       </div>
     );
