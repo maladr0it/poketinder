@@ -56,9 +56,8 @@ const ProfileCard = (props) => {
     />
   );
 
-
   // messy af, but works.  chill for a sec then fix
-  const hiddenStyle = (props.hidden) ? styles.hidden : {}
+  const hiddenStyle = (props.profile) ? styles.hidden : {} || {}
   // detect if item is hidden
   // style={Object.assign({}, styles.root, styles.hidden)}
   // <Card style={styles.root}>
