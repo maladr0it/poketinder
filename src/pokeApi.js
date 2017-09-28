@@ -5,7 +5,7 @@ const pokeApi = {
         'https://pokeapi.co/api/v2/pokemon-species/'+id+'/'
       );
       if (!resp.ok) {
-        throw new Error('name_not_found');
+        throw new Error('name not found');
       }
       const respJson = await resp.json();
       return this.localise(respJson.names, lang)

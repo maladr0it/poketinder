@@ -1,8 +1,8 @@
 import React from 'react';
+
 import {Card, CardTitle, CardMedia, CardActions} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import CircularProgress from 'material-ui/CircularProgress';
-
 import Favorite from 'material-ui/svg-icons/action/favorite';
 import Clear from 'material-ui/svg-icons/content/clear';
 
@@ -12,7 +12,7 @@ const styles = {
   },
   hidden: {
     opacity: 0,
-    transition: '5s'
+    transition: '0.25s'
   },
   imageContainer: {
     display: 'flex',
@@ -37,7 +37,7 @@ const styles = {
 }
 
 const ProfileCard = (props) => {
-  const isLoaded = (props.profile);
+  const isLoaded = (props.profile.isLoaded);
   const nameTitle = (isLoaded) ? (
     <CardTitle title={props.profile.name} />
   ) : (
@@ -57,10 +57,12 @@ const ProfileCard = (props) => {
   );
 
   // messy af, but works.  chill for a sec then fix
-  const hiddenStyle = (props.profile) ? styles.hidden : {} || {}
-  // detect if item is hidden
-  // style={Object.assign({}, styles.root, styles.hidden)}
-  // <Card style={styles.root}>
+  const hiddenStyle = (props.profile.isHidden) ? styles.hidden : {} || {}
+
+  const testClassNames = {
+    appear: {width: '800'},
+    exit: {width: '1200'}
+  }
   return (
     <Card style={Object.assign({}, styles.root, hiddenStyle)}>
       <CardMedia overlay={nameTitle}>
