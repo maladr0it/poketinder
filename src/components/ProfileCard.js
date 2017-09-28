@@ -8,7 +8,8 @@ import Clear from 'material-ui/svg-icons/content/clear';
 
 const styles = {
   root: {
-    textAlign: 'center'
+    textAlign: 'center',
+    position: 'absolute',
   },
   hidden: {
     opacity: 0,
@@ -24,7 +25,6 @@ const styles = {
   },
   image: {
     width: '100%',
-    height: '100%'
   },
   iconButton: {
     width: 100,
@@ -57,14 +57,15 @@ const ProfileCard = (props) => {
   );
 
   // messy af, but works.  chill for a sec then fix
-  const hiddenStyle = (props.profile.isHidden) ? styles.hidden : {} || {}
+  const derivedRootStyle = Object.assign({},
+    styles.root,
+    (props.profile.isHidden) ? styles.hidden : {}
+  );
 
-  const testClassNames = {
-    appear: {width: '800'},
-    exit: {width: '1200'}
-  }
+  // do a derived image style?
+
   return (
-    <Card style={Object.assign({}, styles.root, hiddenStyle)}>
+    <Card style={derivedRootStyle} zDepth={1}>
       <CardMedia overlay={nameTitle}>
         <div style={styles.imageContainer}>
           {sprite}

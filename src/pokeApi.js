@@ -12,7 +12,7 @@ const pokeApi = {
     }
     catch(e) {
       console.log(e.message);
-      return 'name';
+      return 'NAME';
     }
   },
   async getSprite(id) {

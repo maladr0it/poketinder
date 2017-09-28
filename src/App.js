@@ -34,7 +34,7 @@ class App extends Component {
   // fade the top profile out
   nextProfile = () => {
     let state = this.state;
-    state = this.hideProfile(state, state.profileIds.slice(0,1));
+    state = this.hideProfile(state, state.profileIds[0]);
     this.setState(state);
     
     setTimeout(() => 
@@ -64,15 +64,14 @@ class App extends Component {
     });
   }
   render() {
-    console.log(this.state.profileIds);
-    const cards = this.state.profileIds.map((id, i) => 
+    // reverse so first card is rendered on top
+    const cards = this.state.profileIds.slice().reverse().map((id, i) => 
       <ProfileCard key={i} profile={this.state.profilesById[id]} />
     );
     return (
       <div>
         <button onClick={() => this.start()}>START</button>
         <button onClick={() => this.nextProfile()}>NEXT</button>
-        <button onClick={() => this.hideProfile()}>HIDE</button>
         {cards}
       </div>
     );
