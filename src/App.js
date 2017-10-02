@@ -9,19 +9,29 @@ class App extends Component {
     this.state = {
       profileIds: [],
       profilesById: {},
-      asyncData: {}
     }
   }
   // this is really ugly.  how can i do this nicer??
   start = () => {
     let state = this.state;
-    const ids = [33, 43, 42, 95, 111];
+    const ids = [1, 2, 3];
     ids.forEach(id => {
       state = this.addProfile(state, id);
-      this.fetchProfileData(id);
     });
+
     this.setState(state);
   }
+  nextProfile = () => {
+    let state = this.state;
+    state = this.hideProfile(state, state.profileIds[0]);
+    this.setState(state);
+    setTimeout(() => {
+      state.profileIds.shift();
+      state = this.addProfile(state, Math.floor(Math.random()*151 + 1));
+      this.setState(state);
+    }, 1000);
+  }
+
   hideProfile = (state, id) => {
     try {
       state.profilesById[id].isHidden = true;
@@ -31,29 +41,21 @@ class App extends Component {
       return state;
     }
   }
-  // fade the top profile out
-  nextProfile = () => {
-    let state = this.state;
-    state = this.hideProfile(state, state.profileIds[0]);
-    this.setState(state);
-    
-    setTimeout(() => 
-      this.setState({ profileIds: this.state.profileIds.slice(1) }), 250
-    );
-  }
   addProfile = (state, id) => {
     state.profileIds.push(id);
     state.profilesById[id] = {
       isHidden: false,
       isLoaded: false,
     };
+    this.fetchProfileData(id);
     return state;
   }
 
   // messy af, but lowkey works?
   fetchProfileData = async (id) => {
-    const profile = this.state.profilesById[id];
-    profile.name = await pokeApi.getName(id, 'ja');
+    let profile = this.state.profilesById[id];
+    profile.name = 'bob'; // spoof coz api is slow af atm
+    // profile.name = await pokeApi.getName(id, 'ja');
     profile.sprite = await pokeApi.getSprite(id);
     profile.isLoaded = (profile.name && profile.sprite);
     this.setState({
@@ -64,9 +66,9 @@ class App extends Component {
     });
   }
   render() {
-    // reverse so first card is rendered on top
-    const cards = this.state.profileIds.slice().reverse().map((id, i) => 
-      <ProfileCard key={i} profile={this.state.profilesById[id]} />
+    console.log(this.state.profileIds);
+    const cards = this.state.profileIds.map((id, i) => 
+      <ProfileCard key={i} profile={this.state.profilesById[id]} zIndex={-i} />
     );
     return (
       <div>

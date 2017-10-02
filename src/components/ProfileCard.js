@@ -9,11 +9,11 @@ import Clear from 'material-ui/svg-icons/content/clear';
 const styles = {
   root: {
     textAlign: 'center',
-    position: 'absolute',
+    // position: 'absolute',
   },
   hidden: {
     opacity: 0,
-    transition: '0.25s'
+    // transition: '0.25s'
   },
   imageContainer: {
     display: 'flex',
@@ -42,7 +42,7 @@ const ProfileCard = (props) => {
     <CardTitle title={props.profile.name} />
   ) : (
     undefined
-  )
+  );
   const sprite = (isLoaded) ? (
     <img
       style={styles.image}
@@ -56,14 +56,14 @@ const ProfileCard = (props) => {
     />
   );
 
-  // messy af, but works.  chill for a sec then fix
   const derivedRootStyle = Object.assign({},
     styles.root,
-    (props.profile.isHidden) ? styles.hidden : {}
+    (props.profile.isHidden) ? styles.hidden : {},
+    { zIndex: props.zIndex }
   );
 
   // do a derived image style?
-
+  console.log(derivedRootStyle);
   return (
     <Card style={derivedRootStyle} zDepth={1}>
       <CardMedia overlay={nameTitle}>
