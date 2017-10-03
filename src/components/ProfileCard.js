@@ -9,11 +9,13 @@ import Clear from 'material-ui/svg-icons/content/clear';
 const styles = {
   root: {
     textAlign: 'center',
-    // position: 'absolute',
+    position: 'absolute',
+    color: 'red'
   },
   hidden: {
+    transform: 'translate(-600px, -100px)',
     opacity: 0,
-    // transition: '0.25s'
+    transition: '0.5s'
   },
   imageContainer: {
     display: 'flex',
@@ -30,14 +32,29 @@ const styles = {
     width: 100,
     height: 100,
   },
-  icon: {
+  favoriteIcon: {
     width: 72,
     height: 72,
+    color: '9CCC65'
+  },
+  clearIcon: {
+    width: 72,
+    height: 72,
+    color: 'e53935'
+  },
+  inactiveIcon: {
+    color: '9E9E9E'
+  },
+  circularProgress: {
+    color: 'FFCA28',
+    size: 120,
+    thickness: 5,
   }
 }
 
 const ProfileCard = (props) => {
   const isLoaded = (props.profile.isLoaded);
+  const isHidden = (props.profile.isHidden);
   const nameTitle = (isLoaded) ? (
     <CardTitle title={props.profile.name} />
   ) : (
@@ -49,34 +66,37 @@ const ProfileCard = (props) => {
       src={URL.createObjectURL(props.profile.sprite)}
     />
   ) : (
-    <CircularProgress
-      color={'FFCA28'}
-      size={120}
-      thickness={5}
-    />
+    <CircularProgress {...styles.circularProgress} />
   );
 
   const derivedRootStyle = Object.assign({},
     styles.root,
-    (props.profile.isHidden) ? styles.hidden : {},
-    { zIndex: props.zIndex }
+    (props.profile.isHidden) ? styles.hidden : {}
   );
-
-  // do a derived image style?
-  console.log(derivedRootStyle);
+  
   return (
-    <Card style={derivedRootStyle} zDepth={1}>
+    <Card style={derivedRootStyle}>
       <CardMedia overlay={nameTitle}>
         <div style={styles.imageContainer}>
           {sprite}
         </div>
       </CardMedia>
       <CardActions>
-        <IconButton style={styles.iconButton} iconStyle={styles.icon}>
-          <Favorite color={'9CCC65'} />
+        <IconButton
+          disabled={(!isLoaded || isHidden)}
+          style={styles.iconButton}
+          iconStyle={styles.favoriteIcon}
+          onClick={() => props.onLike()}
+        >
+          <Favorite />
         </IconButton>
-        <IconButton style={styles.iconButton} iconStyle={styles.icon}>
-          <Clear color={'e53935'} />
+        <IconButton
+          disabled={(!isLoaded || isHidden)}
+          style={styles.iconButton}
+          iconStyle={styles.clearIcon}
+          onClick={() => props.onDislike()}
+        >
+          <Clear />
         </IconButton>
       </CardActions>
     </Card>

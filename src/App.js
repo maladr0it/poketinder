@@ -7,31 +7,53 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profileIds: [],
+      activeProfileIds: [],
       profilesById: {},
+      rng: [],
     }
   }
-  // this is really ugly.  how can i do this nicer??
-  start = () => {
+  componentWillMount = () => {
     let state = this.state;
-    const ids = [1, 2, 3];
-    ids.forEach(id => {
+    state.rng = Array.from(Array(151), (v, i) => i + 1)
+      .sort(() => Math.random() - 0.5)
+    state.rng.splice(0, 5).forEach(id => {
       state = this.addProfile(state, id);
     });
-
     this.setState(state);
+  }
+  handleLike = () => {
+    this.onNextProfile()
+  }
+  handleDislike = () => {
+    this.onNextProfile()
+  }
+  onNextProfile = () => {
+    let state = this.state;
+    state = this.hideProfile(state, state.activeProfileIds[0]);
+    this.setState(state);
+    setTimeout(() => {
+      this.nextProfile();
+    }, 500);
   }
   nextProfile = () => {
     let state = this.state;
-    state = this.hideProfile(state, state.profileIds[0]);
+    state = this.removeProfile(this.state);
+    state = this.addProfile(state, state.rng.pop());
     this.setState(state);
-    setTimeout(() => {
-      state.profileIds.shift();
-      state = this.addProfile(state, Math.floor(Math.random()*151 + 1));
-      this.setState(state);
-    }, 1000);
   }
-
+  fetchProfileData = async (id) => {
+    let profile = this.state.profilesById[id];
+    const name = await pokeApi.getName(id, 'ja');
+    const sprite = await pokeApi.getSprite(id);
+    profile.isLoaded = (name && sprite) ? true : false;
+    profile = Object.assign({}, profile, { name, sprite });
+    this.setState({
+      profilesById: {
+        ...this.state.profilesById,
+        [id]: profile
+      }
+    });
+  }
   hideProfile = (state, id) => {
     try {
       state.profilesById[id].isHidden = true;
@@ -42,7 +64,7 @@ class App extends Component {
     }
   }
   addProfile = (state, id) => {
-    state.profileIds.push(id);
+    state.activeProfileIds.push(id);
     state.profilesById[id] = {
       isHidden: false,
       isLoaded: false,
@@ -50,30 +72,21 @@ class App extends Component {
     this.fetchProfileData(id);
     return state;
   }
-
-  // messy af, but lowkey works?
-  fetchProfileData = async (id) => {
-    let profile = this.state.profilesById[id];
-    profile.name = 'bob'; // spoof coz api is slow af atm
-    // profile.name = await pokeApi.getName(id, 'ja');
-    profile.sprite = await pokeApi.getSprite(id);
-    profile.isLoaded = (profile.name && profile.sprite);
-    this.setState({
-      profilesById: {
-        ...this.state.profilesById,
-        [id]: profile
-      }
-    });
+  removeProfile = (state) => {
+    state.activeProfileIds.shift();
+    return state;
   }
   render() {
-    console.log(this.state.profileIds);
-    const cards = this.state.profileIds.map((id, i) => 
-      <ProfileCard key={i} profile={this.state.profilesById[id]} zIndex={-i} />
+    const cards = this.state.activeProfileIds.slice().reverse().map((id, i) => 
+      <ProfileCard
+        key={id}
+        profile={this.state.profilesById[id]}
+        onLike={() => this.handleLike()}
+        onDislike={() => this.handleDislike()}
+      />
     );
     return (
       <div>
-        <button onClick={() => this.start()}>START</button>
-        <button onClick={() => this.nextProfile()}>NEXT</button>
         {cards}
       </div>
     );
