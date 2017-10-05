@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import pokeApi from './pokeApi';
 import ProfileCard from './components/ProfileCard';
 
+const styles = {
+  root: {
+    margin: 'auto',
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -21,15 +26,9 @@ class App extends Component {
     });
     this.setState(state);
   }
-  rateProfile = (rating) => {
-    console.log(rating);
+  rateProfile = (id, rating) => {
     let state = this.state;
-    try {
-      state.profilesById[state.activeProfileIds[0]].rating = rating;
-    }
-    catch(e) {
-      console.log(e);
-    }
+    state.profilesById[id].rating = rating;
     this.setState(state);
     setTimeout(() => {
       this.nextProfile();
@@ -72,12 +71,13 @@ class App extends Component {
       <ProfileCard
         key={id}
         profile={this.state.profilesById[id]}
-        onLike={() => this.rateProfile('like')}
-        onDislike={() => this.rateProfile('dislike')}
+        onLike={() => this.rateProfile(id, 'like')}
+        onDislike={() => this.rateProfile(id, 'dislike')}
       />
     )
     return (
-      <div>
+      <div style={styles.root}>
+        HELLO
         {cards}
       </div>
     );

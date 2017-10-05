@@ -9,15 +9,15 @@ import Clear from 'material-ui/svg-icons/content/clear';
 const styles = {
   root: {
     textAlign: 'center',
-    position: 'absolute',
+    // position: 'absolute',
   },
   swipingLeft: {
-    transform: 'translate(-600px, -100px)',
+    transform: 'translate(-400px, -100px)',
     opacity: 0,
     transition: '0.5s'
   },
   swipingRight: {
-    transform: 'translate(+600px, -100px)',
+    transform: 'translate(+400px, -100px)',
     opacity: 0,
     transition: '0.5s'
   },
@@ -25,8 +25,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 400,
-    height: 400,
+    width: '100%',
+    // height: 400,
     margin: 'auto',
   },
   image: {
@@ -56,11 +56,13 @@ const styles = {
 const ProfileCard = (props) => {
   const isLoaded = (props.profile.isLoaded);
   const rating = (props.profile.rating);
+  
   const nameTitle = (isLoaded) ? (
     <CardTitle title={props.profile.name} />
   ) : (
     undefined
   );
+  
   const sprite = (isLoaded) ? (
     <img
       style={styles.image}
@@ -74,7 +76,6 @@ const ProfileCard = (props) => {
     'like' : styles.swipingRight,
     'dislike' : styles.swipingLeft
   };
-
   const derivedRootStyle = Object.assign({},
     styles.root,
     animations[rating]
@@ -107,5 +108,4 @@ const ProfileCard = (props) => {
     </Card>
   )
 }
-
 export default ProfileCard;
