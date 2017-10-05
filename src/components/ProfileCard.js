@@ -10,10 +10,14 @@ const styles = {
   root: {
     textAlign: 'center',
     position: 'absolute',
-    color: 'red'
   },
-  hidden: {
+  swipingLeft: {
     transform: 'translate(-600px, -100px)',
+    opacity: 0,
+    transition: '0.5s'
+  },
+  swipingRight: {
+    transform: 'translate(+600px, -100px)',
     opacity: 0,
     transition: '0.5s'
   },
@@ -42,9 +46,6 @@ const styles = {
     height: 72,
     color: 'e53935'
   },
-  inactiveIcon: {
-    color: '9E9E9E'
-  },
   circularProgress: {
     color: 'FFCA28',
     size: 120,
@@ -54,7 +55,7 @@ const styles = {
 
 const ProfileCard = (props) => {
   const isLoaded = (props.profile.isLoaded);
-  const isHidden = (props.profile.isHidden);
+  const rating = (props.profile.rating);
   const nameTitle = (isLoaded) ? (
     <CardTitle title={props.profile.name} />
   ) : (
@@ -69,11 +70,15 @@ const ProfileCard = (props) => {
     <CircularProgress {...styles.circularProgress} />
   );
 
+  const animations = {
+    'like' : styles.swipingRight,
+    'dislike' : styles.swipingLeft
+  };
+
   const derivedRootStyle = Object.assign({},
     styles.root,
-    (props.profile.isHidden) ? styles.hidden : {}
+    animations[rating]
   );
-  
   return (
     <Card style={derivedRootStyle}>
       <CardMedia overlay={nameTitle}>
@@ -82,21 +87,21 @@ const ProfileCard = (props) => {
         </div>
       </CardMedia>
       <CardActions>
-        <IconButton
-          disabled={(!isLoaded || isHidden)}
-          style={styles.iconButton}
-          iconStyle={styles.favoriteIcon}
-          onClick={() => props.onLike()}
-        >
-          <Favorite />
-        </IconButton>
-        <IconButton
-          disabled={(!isLoaded || isHidden)}
+      <IconButton
+          disabled={(!isLoaded)}
           style={styles.iconButton}
           iconStyle={styles.clearIcon}
           onClick={() => props.onDislike()}
         >
           <Clear />
+        </IconButton>
+        <IconButton
+          disabled={(!isLoaded)}
+          style={styles.iconButton}
+          iconStyle={styles.favoriteIcon}
+          onClick={() => props.onLike()}
+        >
+          <Favorite />
         </IconButton>
       </CardActions>
     </Card>

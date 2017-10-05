@@ -21,15 +21,15 @@ class App extends Component {
     });
     this.setState(state);
   }
-  handleLike = () => {
-    this.onNextProfile()
-  }
-  handleDislike = () => {
-    this.onNextProfile()
-  }
-  onNextProfile = () => {
+  rateProfile = (rating) => {
+    console.log(rating);
     let state = this.state;
-    state = this.hideProfile(state, state.activeProfileIds[0]);
+    try {
+      state.profilesById[state.activeProfileIds[0]].rating = rating;
+    }
+    catch(e) {
+      console.log(e);
+    }
     this.setState(state);
     setTimeout(() => {
       this.nextProfile();
@@ -54,19 +54,10 @@ class App extends Component {
       }
     });
   }
-  hideProfile = (state, id) => {
-    try {
-      state.profilesById[id].isHidden = true;
-      return state;
-    }
-    catch(e) {
-      return state;
-    }
-  }
   addProfile = (state, id) => {
     state.activeProfileIds.push(id);
     state.profilesById[id] = {
-      isHidden: false,
+      rating: undefined,
       isLoaded: false,
     };
     this.fetchProfileData(id);
@@ -81,10 +72,10 @@ class App extends Component {
       <ProfileCard
         key={id}
         profile={this.state.profilesById[id]}
-        onLike={() => this.handleLike()}
-        onDislike={() => this.handleDislike()}
+        onLike={() => this.rateProfile('like')}
+        onDislike={() => this.rateProfile('dislike')}
       />
-    );
+    )
     return (
       <div>
         {cards}
