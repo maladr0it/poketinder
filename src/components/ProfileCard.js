@@ -9,7 +9,8 @@ import Clear from 'material-ui/svg-icons/content/clear';
 const styles = {
   root: {
     textAlign: 'center',
-    // position: 'absolute',
+    position: 'absolute',
+    width: 'inherit',
   },
   swipingLeft: {
     transform: 'translate(-400px, -100px)',
@@ -25,8 +26,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    // height: 400,
+    width: '450px',
+    height: '450px',
     margin: 'auto',
   },
   image: {
@@ -106,6 +107,6 @@ const ProfileCard = (props) => {
         </IconButton>
       </CardActions>
     </Card>
-  )
+  );
 }
 export default ProfileCard;

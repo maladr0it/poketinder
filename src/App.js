@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import pokeApi from './pokeApi';
+import AppBar from 'material-ui/AppBar';
 import ProfileCard from './components/ProfileCard';
 
 const styles = {
   root: {
+  },
+  appBar: {
+    background: '#fb196f',
+  },
+  cardContainer: {
+    position: 'relative',
+    paddingTop: '20px',
     margin: 'auto',
+    width: '500px',
   }
 }
 
@@ -77,8 +86,14 @@ class App extends Component {
     )
     return (
       <div style={styles.root}>
-        HELLO
-        {cards}
+        <AppBar
+          title='PokéTinder'
+          showMenuIconButton={false}
+          style={styles.appBar}
+        />
+        <div style={styles.cardContainer}>
+          {cards}
+        </div>
       </div>
     );
   }
